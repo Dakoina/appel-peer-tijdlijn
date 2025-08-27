@@ -7,7 +7,8 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 5px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
             min-height: 100vh;
@@ -17,46 +18,86 @@
             max-width: 1200px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            body {
+                padding: 2px;
+            }
+            
+            .container {
+                padding: 8px;
+                border-radius: 8px;
+            }
         }
         
         h1 {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2.2em;
+            margin: 10px 0 15px 0;
+            font-size: 1.3em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.1em;
+                margin: 5px 0 10px 0;
+            }
         }
         
         .timeline {
             position: relative;
-            margin: 40px 0;
-            padding: 20px 0;
+            margin: 20px 0;
+            padding: 10px 0;
         }
         
         .months {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 30px;
-            padding: 0 20px;
+            margin-bottom: 15px;
+            padding: 0 5px;
         }
         
         .month {
             font-weight: bold;
             color: #34495e;
-            padding: 10px 15px;
+            padding: 4px 6px;
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 0.9em;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 0.7em;
+            text-align: center;
+            flex: 1;
+            margin: 0 1px;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline {
+                margin: 10px 0;
+                padding: 5px 0;
+            }
+            
+            .months {
+                margin-bottom: 8px;
+                padding: 0 2px;
+            }
+            
+            .month {
+                font-size: 0.6em;
+                padding: 3px 2px;
+                border-radius: 4px;
+            }
         }
         
         .timeline-track {
             position: relative;
-            height: 60px;
+            height: 35px;
             background: repeating-linear-gradient(
                 90deg,
                 #e3f2fd 0%, #e3f2fd 20%,    /* Juli - lichtblauw */
@@ -65,29 +106,49 @@
                 #fce4ec 60%, #fce4ec 80%,   /* Oktober - licht roze */
                 #f3e5f5 80%, #f3e5f5 100%   /* November - licht paars */
             );
-            border-radius: 30px;
-            margin-bottom: 15px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
-            border-left: 3px solid #2196F3;
-            border-right: 3px solid #9C27B0;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.1);
+            border-left: 2px solid #2196F3;
+            border-right: 2px solid #9C27B0;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-track {
+                height: 28px;
+                border-radius: 15px;
+                margin-bottom: 5px;
+                border-left: 1px solid #2196F3;
+                border-right: 1px solid #9C27B0;
+            }
         }
         
         .fruit-bar {
             position: absolute;
-            height: 40px;
-            top: 10px;
-            border-radius: 20px;
+            height: 25px;
+            top: 5px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 0.85em;
+            font-size: 0.65em;
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
             cursor: pointer;
             overflow: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            .fruit-bar {
+                height: 20px;
+                top: 4px;
+                border-radius: 12px;
+                font-size: 0.55em;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            }
         }
         
         .fruit-bar:hover {
@@ -106,25 +167,44 @@
         .legend {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin: 30px 0;
-            padding: 20px;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 10px;
             background: rgba(248, 249, 250, 0.8);
-            border-radius: 10px;
+            border-radius: 8px;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             font-weight: 600;
+            font-size: 0.8em;
         }
         
         .legend-color {
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .legend {
+                gap: 10px;
+                margin: 8px 0;
+                padding: 6px;
+            }
+            
+            .legend-item {
+                font-size: 0.7em;
+                gap: 4px;
+            }
+            
+            .legend-color {
+                width: 14px;
+                height: 14px;
+            }
         }
         
 
@@ -271,72 +351,72 @@
             </div>
         </div>
         
-        <p style="text-align: center; color: #666; font-style: italic; margin-top: 30px;">
-            📱 Optimaal voor mobiel gebruik - alle informatie hieronder!
+        <p style="text-align: center; color: #666; font-style: italic; margin-top: 15px; font-size: 0.8em;">
+            📱 Geoptimaliseerd voor iPhone gebruik!
         </p>
         
-        <div style="background: rgba(248, 249, 250, 0.9); border-radius: 15px; padding: 25px; margin-top: 30px;">
-            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 25px; font-size: 1.5em;">🍎🍐 Overzicht Rassen & Gebruik</h2>
+        <div style="background: rgba(248, 249, 250, 0.9); border-radius: 10px; padding: 15px; margin-top: 15px;">
+            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 15px; font-size: 1.1em;">🍎🍐 Overzicht Rassen & Gebruik</h2>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #e74c3c;">🍎 Gravenstein</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">Half juli - augustus</span><br>
-                    🍽️ Handappel & keukengebruik
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px;">
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c; font-size: 0.9em;">🍎 Gravenstein</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">Half juli - augustus</span><br>
+                    <span style="font-size: 0.8em;">🍽️ Handappel & keukengebruik</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #e74c3c;">🍎 James Grieve</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">Eind augustus - september</span><br>
-                    🍯 Handappel, moes, taart, sap
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c; font-size: 0.9em;">🍎 James Grieve</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">Eind augustus - september</span><br>
+                    <span style="font-size: 0.8em;">🍯 Handappel, moes, taart, sap</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #e74c3c;">🍎 Discovery</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">Augustus - september</span><br>
-                    🖐️ Hoofdzakelijk handappel
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c; font-size: 0.9em;">🍎 Discovery</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">Augustus - september</span><br>
+                    <span style="font-size: 0.8em;">🖐️ Hoofdzakelijk handappel</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #e74c3c;">🍎 Alkmene</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">September</span><br>
-                    🍂 Herfstappel
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c; font-size: 0.9em;">🍎 Alkmene</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">September</span><br>
+                    <span style="font-size: 0.8em;">🍂 Herfstappel</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #e74c3c;">🍎 Red Topaz</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">September - oktober</span><br>
-                    ✨ Moderne appelvariant
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c; font-size: 0.9em;">🍎 Red Topaz</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">September - oktober</span><br>
+                    <span style="font-size: 0.8em;">✨ Moderne appelvariant</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #27ae60;">🍐 Clapp's Favorite</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">Eind augustus - september</span><br>
-                    🍽️🍲 Tafel- & kookpeer
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60; font-size: 0.9em;">🍐 Clapp's Favorite</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">Eind augustus - september</span><br>
+                    <span style="font-size: 0.8em;">🍽️🍲 Tafel- & kookpeer</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #27ae60;">🍐 Conference</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">Eind augustus - oktober</span><br>
-                    ⭐ Veelzijdig: vers, koken, conserven
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60; font-size: 0.9em;">🍐 Conference</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">Eind augustus - oktober</span><br>
+                    <span style="font-size: 0.8em;">⭐ Veelzijdig: vers, koken, conserven</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #27ae60;">🍐 Comtesse de Paris</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">September - oktober</span><br>
-                    🏛️ Oude herfstpeer
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60; font-size: 0.9em;">🍐 Comtesse de Paris</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">September - oktober</span><br>
+                    <span style="font-size: 0.8em;">🏛️ Oude herfstpeer</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #27ae60;">🍐 Bonne Louise d'Avranches</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">Oktober</span><br>
-                    🍂 Herfstpeer
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60; font-size: 0.9em;">🍐 Bonne Louise d'Avranches</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">Oktober</span><br>
+                    <span style="font-size: 0.8em;">🍂 Herfstpeer</span>
                 </div>
                 
-                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <strong style="color: #27ae60;">🍐 Doyenne du Comice</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">Oktober - november</span><br>
-                    👑 Premium dessertpeer
+                <div style="background: white; padding: 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60; font-size: 0.9em;">🍐 Doyenne du Comice</strong><br>
+                    <span style="color: #666; font-size: 0.75em;">Oktober - november</span><br>
+                    <span style="font-size: 0.8em;">👑 Premium dessertpeer</span>
                 </div>
             </div>
         </div>
