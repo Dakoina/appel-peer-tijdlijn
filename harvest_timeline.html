@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oogst Tijdlijn Fruitrassen</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+            padding: 20px 0;
+        }
+        
+        .months {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        
+        .month {
+            font-weight: bold;
+            color: #34495e;
+            padding: 10px 15px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 0.9em;
+        }
+        
+        .timeline-track {
+            position: relative;
+            height: 60px;
+            background: repeating-linear-gradient(
+                90deg,
+                #e3f2fd 0%, #e3f2fd 20%,    /* Juli - lichtblauw */
+                #fff3e0 20%, #fff3e0 40%,   /* Augustus - licht oranje */
+                #f1f8e9 40%, #f1f8e9 60%,   /* September - licht groen */
+                #fce4ec 60%, #fce4ec 80%,   /* Oktober - licht roze */
+                #f3e5f5 80%, #f3e5f5 100%   /* November - licht paars */
+            );
+            border-radius: 30px;
+            margin-bottom: 15px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 3px solid #2196F3;
+            border-right: 3px solid #9C27B0;
+        }
+        
+        .fruit-bar {
+            position: absolute;
+            height: 40px;
+            top: 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .fruit-bar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        }
+        
+        .appel {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+        
+        .peer {
+            background: linear-gradient(135deg, #26de81, #20bf6b);
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(248, 249, 250, 0.8);
+            border-radius: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        
+        .legend-color {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+
+        
+        .timeline-dividers {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .timeline-dividers::before,
+        .timeline-dividers::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(52, 73, 94, 0.2);
+        }
+        
+        .timeline-dividers::before { left: 20%; }  /* Na juli */
+        .timeline-dividers::after { left: 40%; }   /* Na augustus */
+        
+        .month-divider {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(52, 73, 94, 0.2);
+        }
+        
+        .divider-60 { left: 60%; }  /* Na september */
+        .divider-80 { left: 80%; }  /* Na oktober */
+        
+        /* Positioning for each fruit variety */
+        /* Precieze positionering voor 5 maanden (juli-november) */
+        /* Juli=0-20%, Augustus=20-40%, September=40-60%, Oktober=60-80%, November=80-100% */
+        /* Half maand = start op 50% van die maand, Eind maand = start op 75% van die maand */
+        
+        .gravenstein { left: 10%; width: 30%; }           /* Half juli (10%) - augustus (20-40%) */
+        .james-grieve { left: 35%; width: 25%; }          /* Eind augustus (35%) - september (40-60%) */
+        .discovery { left: 20%; width: 40%; }             /* Augustus (20-40%) - september (40-60%) */
+        .clapp { left: 35%; width: 25%; }                 /* Eind augustus (35%) - september (40-60%) */
+        .conference { left: 35%; width: 45%; }            /* Eind augustus (35%) - oktober (60-80%) */
+        .alkmene { left: 40%; width: 20%; }               /* September (40-60%) */
+        .comtesse { left: 40%; width: 40%; }              /* September (40-60%) - oktober (60-80%) */
+        .red-topaz { left: 40%; width: 40%; }             /* September (40-60%) - oktober (60-80%) */
+        .bonne-louise { left: 60%; width: 20%; }          /* Oktober (60-80%) */
+        .doyenne { left: 60%; width: 40%; }               /* Oktober (60-80%) - november (80-100%) */
+        
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍎🍐 Oogst Tijdlijn Fruitrassen - Juli tot December</h1>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color appel"></div>
+                <span>Appel</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color peer"></div>
+                <span>Peer</span>
+            </div>
+        </div>
+        
+        <div class="months">
+            <div class="month">Juli</div>
+            <div class="month">Augustus</div>
+            <div class="month">September</div>
+            <div class="month">Oktober</div>
+            <div class="month">November</div>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-dividers">
+                <div class="month-divider divider-60"></div>
+                <div class="month-divider divider-80"></div>
+            </div>
+            <div class="timeline-track">
+                <div class="fruit-bar appel gravenstein">
+                    🍎 Gravenstein
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar appel james-grieve">
+                    🍎 James Grieve
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar appel discovery">
+                    🍎 Discovery
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar peer clapp">
+                    🍐 Clapp's Favorite
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar peer conference">
+                    🍐 Conference
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar appel alkmene">
+                    🍎 Alkmene
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar peer comtesse">
+                    🍐 Comtesse de Paris
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar appel red-topaz">
+                    🍎 Red Topaz
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar peer bonne-louise">
+                    🍐 Bonne Louise d'Avranches
+                </div>
+            </div>
+            
+            <div class="timeline-track">
+                <div class="fruit-bar peer doyenne">
+                    🍐 Doyenne du Comice
+                </div>
+            </div>
+        </div>
+        
+        <p style="text-align: center; color: #666; font-style: italic; margin-top: 30px;">
+            📱 Optimaal voor mobiel gebruik - alle informatie hieronder!
+        </p>
+        
+        <div style="background: rgba(248, 249, 250, 0.9); border-radius: 15px; padding: 25px; margin-top: 30px;">
+            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 25px; font-size: 1.5em;">🍎🍐 Overzicht Rassen & Gebruik</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c;">🍎 Gravenstein</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">Half juli - augustus</span><br>
+                    🍽️ Handappel & keukengebruik
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c;">🍎 James Grieve</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">Eind augustus - september</span><br>
+                    🍯 Handappel, moes, taart, sap
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c;">🍎 Discovery</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">Augustus - september</span><br>
+                    🖐️ Hoofdzakelijk handappel
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c;">🍎 Alkmene</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">September</span><br>
+                    🍂 Herfstappel
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #e74c3c;">🍎 Red Topaz</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">September - oktober</span><br>
+                    ✨ Moderne appelvariant
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60;">🍐 Clapp's Favorite</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">Eind augustus - september</span><br>
+                    🍽️🍲 Tafel- & kookpeer
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60;">🍐 Conference</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">Eind augustus - oktober</span><br>
+                    ⭐ Veelzijdig: vers, koken, conserven
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60;">🍐 Comtesse de Paris</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">September - oktober</span><br>
+                    🏛️ Oude herfstpeer
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60;">🍐 Bonne Louise d'Avranches</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">Oktober</span><br>
+                    🍂 Herfstpeer
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <strong style="color: #27ae60;">🍐 Doyenne du Comice</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">Oktober - november</span><br>
+                    👑 Premium dessertpeer
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
